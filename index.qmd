@@ -1,0 +1,76 @@
+---
+title: "MP00"
+---
+HI there.
+Xingli Wang: An international student studying at baruch major in Business Analytics.  Used to be a fitness trainer and an external line electrician; seeking any opportunity for success and trying to strive for a better life; Guthub ID is caicaice.
+
+```{r, echo = FALSE}
+if(!require("tidyverse")) install.packages("tidyverse")
+library(tidyverse)
+txhousing |> 
+  filter(city=="Houston") |> 
+  group_by(year) |> 
+  summarize(sales=sum(sales)) |> 
+  ggplot(aes(x=year, y=sales)) + 
+    geom_line() + 
+    ggtitle("Annual Houses Sold in Houston, TX")
+
+
+if(!require("tidyverse")) install.packages("tidyverse")
+library(tidyverse)
+txhousing |> 
+   filter(city=="Houston") |> 
+    group_by(month) |> 
+    summarize(avg_price=sum(volume) / sum(sales)) |> 
+    mutate(month=factor(month.abb[month], 
+                 levels=month.abb, ordered=TRUE)) |>
+    ggplot(aes(x=month, y=avg_price)) + 
+    geom_bar(stat="identity") + 
+    ggtitle("Average Price of Houses Sold in Texas by Month") + 
+    xlab("Month") + 
+    ylab("Average Sale Price") + 
+    scale_y_continuous(labels = scales::dollar)
+    
+if(!require("tidyverse")) install.packages("tidyverse")
+library(tidyverse)
+txhousing |> filter(year==2015) |> 
+    group_by(city) |> 
+    summarize(avg_price=sum(volume) / sum(sales),
+              num_sales=sum(sales)) |> 
+    slice_max(num_sales, n=10) |>
+    ggplot(aes(x=city, y=avg_price)) + 
+    geom_bar(stat="identity") + 
+    ggtitle("Average Price of Houses Sold in 2015 by City in Texas") + 
+    xlab("City") + 
+    ylab("Average Sale Price") + 
+    scale_y_continuous(labels = scales::dollar)
+```
+
+
+```{r}
+#| include: false
+1+1
+```
+--------------
+Last Updated: `r format(Sys.time(), "%A %m %d, %Y at %H:%M%p")`
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+if(!require("leaflet")){
+    options(repos=c(CRAN="https://cloud.r-project.org"))
+    install.packages("leaflet")
+    stopifnot(require("leaflet"))
+}
+
+baruch_longitude <- -73.98333
+baruch_latitude  <- +40.74028
+
+leaflet() |>
+  addTiles() |>
+  setView(baruch_longitude, baruch_latitude, zoom=17) |>
+  addPopups(baruch_longitude, baruch_latitude, 
+            "I am a Master's student at <b>Baruch College</b>!")
+```
