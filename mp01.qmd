@@ -1,5 +1,484 @@
 ---
-title: "Mini-Project Placeholder"
+title: "Strategy Memo for Netflix"
+subtitle: "STA 9750 MP #01"
+author: Xingli Wang
+format:
+  html:
+    code-fold: true      
+    code-summary: "Code" 
 ---
 
-This is a placeholder for STA9750 Mini-Project 1. Check back soon for more!
+
+### A Bigger Library, But Not a Bigger Audience: Rethinking Netflix’s Content Strategy for 2027
+
+Looking through Netflix’s viewing data from January 2023 to June 2026, which covers 24,427 titles, one thing stands out to me. For the past few years we have been adding more and more to the catalog, and audiences have not responded with the same enthusiasm.
+
+Start with the size of the library. Between the second half of 2023 and the first half of 2026, the number of titles grew from 6,595 to 8,187, an increase of about 24%. Over the same stretch, total hours viewed rose by only 14.5%. We added nearly a quarter more content, yet the time people spend watching did not keep pace, which means each title is now getting less attention on average. Growing the catalog for its own sake is starting to pay off less and less.
+
+So where is the time actually going? The obvious guess would be a handful of blockbusters, but the numbers say otherwise. In the first half of 2026, the top ten titles together accounted for just 6.70% of all viewing hours. What really holds the platform up is a group of strong performers that may never hit number one but keep drawing viewers period after period.
+
+Franchises carry the most weight in that group. The Bridgerton universe has racked up 4.86 billion hours in total, and the core seasons of Stranger Things have reached 5.59 billion. Stranger Things 4 alone has appeared in seven consecutive reporting periods, and even in its weakest period it still pulled in 97.1 million hours, the steadiest record of any long-running title. A show that people keep coming back to for more than three years is worth far more than its opening weeks suggest.
+
+The second pattern worth paying attention to is reach. Titles available worldwide make up only 35.1% of the catalog, but they account for 51.9% of viewing hours. Put simply, a globally available title earns roughly twice as many hours as a regionally licensed one.
+
+What I find most interesting is that many of the most consistent performers are not in English. The Korean drama Queen of Tears stayed on the charts for five periods, averaging 221 million hours per period, with its lowest period still at 61.1 million. When Life Gives You Tangerines averaged 249 million hours. These are stories rooted firmly in Korea, and yet audiences everywhere embraced them. Local content does not have to stay local. The better approach is to produce locally and distribute globally.
+
+With that in mind, I have two recommendations for original content in 2027 and beyond.
+
+First, new projects should launch with global rights wherever possible. Regional licensing still has a role to play, but it should no longer be the main path. Markets like Korea, which have already shown they can turn local stories into worldwide hits, deserve more investment.
+
+Second, roughly half of the content budget should go toward flagship franchises that can run for multiple seasons and support spin-offs. On the other side, mid-budget, one-off projects with no realistic sequel potential should be cut. Rather than releasing hundreds more titles each year that are quickly forgotten, we would be better off putting that money toward the next Stranger Things or Bridgerton.
+
+As for live events, they can gather a large audience in a short window, which makes them useful for generating buzz and bringing in new subscribers. But they contribute relatively few viewing hours. Live programming works best as a supporting tool that points viewers toward our long-running shows, not as a replacement for them.
+
+In short, what we need over the next few years is not more content. We need content that can travel across borders and still hold an audience years later.
+```{r}
+#| output: false
+#| message: false
+#| warning: false
+read_all_sheets <- function(p) {
+  excel_sheets(p) |>
+    set_names() |>
+    map(\(s) read_excel(p, sheet = s, skip = 3, na = "*") |>
+              mutate(`Release Date` = as.Date(`Release Date`),
+                     Runtime        = as.character(Runtime))) |>
+    list_rbind(names_to = "sheet")
+}
+load_netflix_data <- function(){
+  library(tidyverse)
+  library(rvest)
+  library(readxl)
+  library(fs)
+  
+  data_dir <- path("data", "mp01")
+    
+  if(!dir_exists(data_dir)){
+    dir_create(data_dir, showWarnings=FALSE, recurse=TRUE)
+  }
+  
+  NETFLIX_URLS <- list(
+    `2023H1` = "https://about.netflix.com/news/what-we-watched-a-netflix-engagement-report",
+    `2023H2` = "https://about.netflix.com/news/what-we-watched-the-second-half-of-2023",
+    `2024H1` = "https://about.netflix.com/news/what-we-watched-the-first-half-of-2024",
+    `2024H2` = "https://about.netflix.com/news/what-we-watched-the-second-half-of-2024",
+    `2025H1` = "https://about.netflix.com/news/what-we-watched-the-first-half-of-2025",
+    `2025H2` = "https://about.netflix.com/news/what-we-watched-the-second-half-of-2025",
+    `2026H1` = "https://about.netflix.com/news/what-we-watched-the-first-half-of-2026"
+  )
+  
+  download_if_needed <- function(url, local){
+    if(!file_exists(local)){
+      download.file(url, local, quiet = TRUE, mode = "wb")
+    }
+    
+    return(local)
+  }
+    
+  NETFLIX_URLS |> 
+    map(read_html) |> 
+    map(html_element, xpath = "//a[contains(@href, '.xlsx')]") |> 
+    map_chr(html_attr, "href") |> 
+    enframe("period", "url") |> 
+   mutate(path = path(data_dir, paste0(period, ".xlsx")), 
+          path = map2(url, path, download_if_needed), 
+          data = map(path, read_excel, skip=3, na="*"), 
+          data = map(data, \(x) x |> mutate(`Release Date` = as.Date(`Release Date`)))) |>
+    unnest(data) |> 
+    select(-url, -path) |> 
+    mutate(year=str_sub(period, 1, 4), 
+           half=str_sub(period, start=6), 
+           period_start = make_date(year, if_else(half==1, 1, 7), 1), 
+           period_end = make_date(year, if_else(half==1, 6, 12), if_else(half==1, 30, 31))) |> 
+    filter(!is.na(`Hours Viewed`)) |> 
+    mutate(live_event = !is.na(Runtime) & str_detect(Runtime, "\\d+:\\d+\\*"), 
+           clean_time = str_remove(Runtime, fixed("*")),
+           Runtime = 60 * hour(hm(clean_time)) + minute(hm(clean_time))) |>
+    select(-clean_time) |>
+    mutate(Runtime = coalesce(Runtime, mean(Runtime, na.rm=TRUE)), 
+           .by=Title, 
+           Title = stringi::stri_trans_general(Title, "Latin-ASCII"),
+           Title = str_remove(Title, " // .*"), 
+           Title = str_remove(Title, "[^[:ascii:]].*"), 
+           Title = str_trim(Title)) |>
+    filter_out(Title == "") |>
+    select(year, 
+           period, 
+           period_start, 
+           period_end, 
+           Title, 
+           -half, 
+           Runtime, 
+           Views, 
+           `Hours Viewed`, 
+           `Release Date`,
+           `Available Globally?`, 
+           live_event)
+}
+
+NETFLIX_DATA <- load_netflix_data()
+
+
+
+
+library(tidyverse)
+
+NETFLIX_DATA_CLEAN <- NETFLIX_DATA |>
+  rename(
+    title= Title, runtime= Runtime, views= Views,
+hours_viewed= `Hours Viewed`, release_date= `Release Date`, available_globally = `Available Globally?`
+  ) |>
+  mutate(
+    year= as.integer(year), available_globally = (available_globally == "Yes")
+  )
+
+
+glimpse(NETFLIX_DATA_CLEAN)
+summary(NETFLIX_DATA_CLEAN)
+
+#| label: data-acquisition
+#| output: false
+#| message: false
+#| warning: false
+#Initial EDA Pass
+library(scales)
+library(skimr)
+skim(NETFLIX_DATA_CLEAN)
+```
+
+
+
+
+```{r}
+#1.What date range is covered by this data set?
+date_range <- NETFLIX_DATA_CLEAN |> 
+summarise(min_date = min(period_start, na.rm = TRUE), max_date = max(period_end, na.rm = TRUE))
+start_date <- date_range$min_date
+end_date <- date_range$max_date   
+```
+
+
+
+```{r}
+#2.How many different shows and movies are covered in this data set?
+n_shows <- NETFLIX_DATA_CLEAN |> 
+distinct(title) |> 
+nrow()
+```
+
+
+
+
+```{r}
+#3.How many total hours have been spent watching shows from the Bridgerton universe?
+bridgerton_hours <- NETFLIX_DATA_CLEAN |> 
+filter(str_detect(title, "Bridgerton")) |> 
+summarise(total_hours = sum(hours_viewed, na.rm = TRUE)) |> pull(total_hours)
+```
+
+
+
+```{r}
+#4.How many total hours have been spent watching the five seasons of Stranger Things? 
+st_hours <- NETFLIX_DATA_CLEAN |> 
+filter(str_detect(title, "Stranger Things")) |> 
+filter_out(str_detect(title, "Beyond Stranger Things")) |> 
+filter_out(str_detect(title, "Tales from")) |> 
+filter_out(str_detect(title, "Fireplace")) |> 
+summarise(total_hours = sum(hours_viewed, na.rm = TRUE)) |> 
+pull(total_hours)
+```
+
+
+```{r}
+# 5.What percentage of total watch time was spent on the Top 10 titles of 2026H1?
+total_2026h1 <- NETFLIX_DATA_CLEAN |> 
+filter(period == "2026H1") |> 
+summarise(total = sum(hours_viewed, na.rm = TRUE)) |> 
+pull(total)
+
+
+top10_pct <- NETFLIX_DATA_CLEAN |> 
+filter(period == "2026H1") |> 
+arrange(desc(hours_viewed)) |> 
+slice_head(n = 10) |> 
+summarise(top10_sum = sum(hours_viewed, na.rm = TRUE)) |> 
+mutate(pct = top10_sum / total_2026h1) |> 
+pull(pct)
+```
+
+
+```{r}
+# 6.What fraction of Netflix’s catalog is globally available?
+global_by_title <- NETFLIX_DATA_CLEAN |> 
+summarise(frac = mean(available_globally, na.rm = TRUE)) |> 
+pull(frac)
+
+
+global_by_hours <- NETFLIX_DATA_CLEAN |> 
+summarise(frac = sum(hours_viewed[available_globally], na.rm = TRUE) / sum(hours_viewed, na.rm = TRUE)) |> 
+pull(frac)
+```
+## This analysis examines Netflix viewing data from `r start_date` to `r end_date`, covering `r comma(n_shows)` unique shows and movies.
+
+In the first half of 2026 (2026H1), the top 10 titles accounted for `r percent(top10_pct, accuracy = 0.01)` of total watch time, highlighting the concentration of viewership among the most popular titles.
+Within the Bridgerton universe, viewers spent a total of `r comma(bridgerton_hours)` hours watching its titles, while the core seasons of *Stranger Things* accumulated `r comma(st_hours)` hours of viewing time.   
+In additon, it shows the global availability of Netflix's catalog, finding that approximately `r percent(global_by_title, accuracy = 0.1)` of titles are available worldwide, increasing to `r percent(global_by_hours, accuracy = 0.1)` when weighted by total hours viewed. 
+```{r}
+```
+
+
+```{r}
+#| warning: false
+library(tidyverse)
+library(gt)
+library(scales)
+
+
+top_titles_per_period <- NETFLIX_DATA_CLEAN |> 
+  group_by(period) |> 
+  mutate(total_period_hours = sum(hours_viewed, na.rm = TRUE)) |> 
+  arrange(desc(hours_viewed), .by_group = TRUE) |> 
+  slice_head(n = 1) |> 
+  ungroup() |> 
+  mutate(fraction = hours_viewed / total_period_hours) |> 
+  select(period, title, hours_viewed, fraction)
+
+
+top_titles_per_period |> 
+  gt() |> 
+  tab_header(
+    title = "Top Title by Period",
+    subtitle = "Highest-viewed title and its share of total period viewership"
+  ) |> 
+  cols_label(
+    period = "Period",
+    title = "Top Title",
+    hours_viewed = "Hours Viewed",
+    fraction = "Viewership Share"
+  ) |> 
+  fmt_number(columns = hours_viewed, suffixing = TRUE) |> 
+  fmt_percent(columns = fraction, decimals = 2)
+```
+As we can see. By identifying the top-rated content with the longest viewing time within each six-month period, the percentage of viewing time for each top-rated content within the total viewing time for the entire period was calculated.
+er
+```{r}
+library(tidyverse)
+library(gt)
+library(scales)
+
+catalog_trends <- NETFLIX_DATA_CLEAN |> 
+  group_by(period) |> 
+  summarise(
+    total_titles = n(),
+    total_runtime_hours = sum(runtime, na.rm = TRUE) / 60, 
+    total_views = sum(views, na.rm = TRUE),
+    total_hours_viewed = sum(hours_viewed, na.rm = TRUE)
+  ) |> 
+  arrange(period)
+
+
+catalog_trends |> 
+  gt() |> 
+  
+  tab_header(
+    title = md("**Netflix Content Catalog Evolution**"),
+    subtitle = md("Summary of title count, total runtime, and engagement across reporting periods")
+  ) |> 
+  
+  cols_label(
+    period = "Reporting Period",
+    total_titles = "Total Titles",
+    total_runtime_hours = "Total Runtime (Hours)",
+    total_views = "Total Views",
+    total_hours_viewed = "Total Hours Viewed"
+  ) |> 
+  
+  fmt_number(
+    columns = c(total_titles, total_runtime_hours, total_views, total_hours_viewed),
+    decimals = 0,
+    use_seps = TRUE
+  ) |> 
+  
+  opt_table_lines(extent = "default") |> 
+  tab_options(
+    table.font.names = "Arial",
+    heading.title.font.size = px(18),
+    heading.subtitle.font.size = px(12),
+    column_labels.background.color = "#F4F5F7"
+  ) |> 
+  
+  tab_source_note(
+    source_note = md("*Note: Total runtime is computed based on the cleaned runtime of each title summed across the period.*")
+  )
+
+```
+Based on Netflix’s official semi-annual reporting cycles to capture the dynamic expansion of the platform’s catalog over time. We can see the top title (by total hours viewed) in each period and what fraction of total view.
+san
+```{r}
+library(tidyverse)
+library(gt)
+
+staple_shows <- NETFLIX_DATA_CLEAN |> 
+  group_by(title) |> 
+  summarise(
+    periods_appeared = n(),
+    avg_hours = mean(hours_viewed, na.rm = TRUE),
+    min_hours = min(hours_viewed, na.rm = TRUE),
+    sd_hours = sd(hours_viewed, na.rm = TRUE)
+  ) |> 
+  
+  filter(periods_appeared >= 3) |> 
+  arrange(desc(avg_hours)) |> 
+  slice_head(n = 10)
+
+
+staple_shows |> 
+  gt() |> 
+  tab_header(
+    title = md("**Netflix 'Comfort Food' Staples**"),
+    subtitle = md("Top titles ranked by consistently high viewership across multiple reporting periods")
+  ) |> 
+  cols_label(
+    title = "Title",
+    periods_appeared = "Periods Active",
+    avg_hours = "Average Hours Viewed",
+    min_hours = "Minimum Hours Viewed",
+    sd_hours = "Std. Deviation"
+  ) |> 
+  fmt_number(
+    columns = c(avg_hours, min_hours, sd_hours),
+    decimals = 0,
+    use_seps = TRUE
+  ) |> 
+  opt_table_lines(extent = "default") |> 
+  tab_options(
+    table.font.names = "Arial",
+    heading.title.font.size = px(16),
+    column_labels.background.color = "#F4F5F7"
+  ) |> 
+  tab_source_note(
+    source_note = md("*Note: Filtered for titles appearing in at least 3 periods to evaluate consistency over time.*")
+  )
+```
+By filtering the periods, we can identify those with the most consistently high viewership.
+
+si
+```{r}
+library(tidyverse)
+library(gt)
+library(scales)
+
+
+show_vs_movie_trends <- NETFLIX_DATA_CLEAN |> 
+  mutate(
+    
+    content_type = if_else(
+      str_detect(title, regex("season", ignore_case = TRUE)) | (runtime > 240),
+      "TV Show",
+      "Movie"
+    )
+  ) |> 
+  group_by(period, content_type) |> 
+  summarise(total_hours = sum(hours_viewed, na.rm = TRUE), .groups = "drop") |> 
+  
+  group_by(period) |> 
+  mutate(fraction = total_hours / sum(total_hours)) |> 
+  ungroup() |> 
+  
+  pivot_wider(
+    id_cols = period,
+    names_from = content_type,
+    values_from = c(total_hours, fraction)
+  ) |> 
+  arrange(period)
+
+show_vs_movie_trends |> 
+  gt() |> 
+  tab_header(
+    title = md("**TV Shows vs. Movies Viewership Share by Period**"),
+    subtitle = md("Heuristic classification based on title keywords ('Season') and runtime (> 4 hours)")
+  ) |> 
+  cols_label(
+    period = "Reporting Period",
+    total_hours_Movie = "Movie Hours",
+    `total_hours_TV Show` = "TV Show Hours",
+    fraction_Movie = "Movie Share",
+    `fraction_TV Show` = "TV Show Share"
+  ) |> 
+  fmt_number(
+    columns = c(total_hours_Movie, `total_hours_TV Show`),
+    decimals = 0,
+    use_seps = TRUE
+  ) |> 
+  fmt_percent(
+    columns = c(fraction_Movie, `fraction_TV Show`),
+    decimals = 1
+  ) |> 
+  opt_table_lines(extent = "default") |> 
+  tab_options(
+    table.font.names = "Arial",
+    heading.title.font.size = px(16),
+    column_labels.background.color = "#F4F5F7"
+  ) |> 
+  tab_source_note(
+    source_note = md("*Note: Heuristic defines content as a TV Show if its title contains 'Season' or runtime exceeds 240 minutes.*")
+  )
+```
+By capturing all episodes from series that span multiple seasons—and defining "long-form series" as those with a total duration of at least 4 hours—we can see that TV series account for a larger share of viewing time than movies.
+wu
+```{r}
+library(tidyverse)
+library(gt)
+library(scales)
+
+live_vs_pretaped <- NETFLIX_DATA_CLEAN |> 
+  mutate(content_category = if_else(live_event, "Live Event", "Pre-taped Content")) |> 
+  group_by(content_category) |> 
+  summarise(
+    total_count = n(),
+    avg_views = mean(views, na.rm = TRUE),
+    avg_hours = mean(hours_viewed, na.rm = TRUE),
+    
+    top_tier_views = quantile(views, 0.90, na.rm = TRUE),
+    top_tier_hours = quantile(hours_viewed, 0.90, na.rm = TRUE)
+  )
+
+
+live_vs_pretaped |> 
+  gt() |> 
+  tab_header(
+    title = md("**Live Events vs. Pre-taped Content Performance**"),
+    subtitle = md("Comparing baseline averages against top-tier threshold (90th percentile)")
+  ) |> 
+  cols_label(
+    content_category = "Category",
+    total_count = "Total Titles",
+    avg_views = "Avg Views",
+    avg_hours = "Avg Hours Viewed",
+    top_tier_views = "Top 10% Views",
+    top_tier_hours = "Top 10% Hours Viewed"
+  ) |> 
+  fmt_number(
+    columns = c(total_count, avg_views, avg_hours, top_tier_views, top_tier_hours),
+    decimals = 0,
+    use_seps = TRUE
+  ) |> 
+  opt_table_lines(extent = "default") |> 
+  tab_options(
+    table.font.names = "Arial",
+    heading.title.font.size = px(16),
+    column_labels.background.color = "#F4F5F7"
+  ) |> 
+  tab_source_note(
+    source_note = md("*Note: Top-tier benchmark is set at the 90th percentile (Top 10%) of each category.*")
+  )
+```
+Live content and pre-recorded content exhibit different characteristics in terms of viewership performance.
+Live events typically garner high view counts by offering content that is timely and attracts broad interest, whereas pre-recorded content generally has a longer duration than live events.
+
+
+::: {.callout-note title="AI Usage Statement" collapse="true"}
+
+Gemini was used to help write the code in this project, but all non-code text was generated without the use of any Generative AI tools. Additionally, Gemini was used to provide additional background information on the topic and to brainstorm ideas for the final open-ended prompt.. 
+
+:::
