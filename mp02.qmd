@@ -1,5 +1,589 @@
 ---
-title: "Mini-Project Placeholder"
+title: "U.S. Energy: 2025 National Green Transportation Awards"
+format:
+  html:
+    code-fold: true
 ---
 
-This is a placeholder for STA9750 Mini-Project 2. Check back soon for more!
+Welcome to U.S. Energy! Today's topic is the Green Transportation Awards. All public transportation providers across the U.S. are eligible for awards in 2025, and we'll be revealing the best and worst performers of the year.
+
+Let's begin today's program.
+
+People are increasingly prioritizing green transportation and opting for public transport. However, public transport itself often comes with considerable carbon emissions. Despite various energy sources being explored, the cost remains high: the five states with the most expensive electricity are Hawaii, California, Connecticut, Rhode Island, and Massachusetts. 
+The five states with the highest carbon intensity for electricity are West Virginia, Kentucky, Wyoming, Missouri, and Hawaii. Hawaii is on both lists, boasting both expensive and "dirty" electricity, making it a "double champion."
+
+```{r}
+#| eval: true
+#| include: false
+library(tidyverse)
+library(stringr)
+library(httr2)
+library(rvest)
+
+get_eia_sep <- function(state, abbr){
+    library(tidyverse)
+    library(stringr)
+    library(httr2)
+    library(rvest)
+    library(fs)
+  
+    state_formatted <- str_to_lower(state) |> str_replace_all("\\s", "")
+    
+    dir_name <- fs::path("data", "mp02")
+    file_name <- fs::path(dir_name, state_formatted)
+    
+    fs::dir_create(dir_name, recurse=TRUE)
+    
+    if(!fs::file_exists(file_name)){
+        BASE_URL <- "https://www.eia.gov"
+        RESPONSE <- request(BASE_URL) |> 
+          req_url_path("electricity", 
+                       "state", 
+                       state_formatted) |>
+          req_headers(
+            `User-Agent` = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:149.0) Gecko/20100101 Firefox/149.0"
+            ) |>   
+          req_retry(
+                max_tries = 4, 
+          ) |>
+          req_perform(file_name)
+    
+        resp_check_status(RESPONSE)
+    }
+    
+    TABLE <- read_html(file_name) |> 
+        html_element("table") |> 
+        html_table() |>
+        mutate(Item = str_to_lower(Item))
+    
+    if("U.S. rank" %in% colnames(TABLE)){
+        TABLE <- TABLE |> rename(Rank = `U.S. rank`)
+    }
+    
+    CO2_MWh <- TABLE |> 
+        filter(Item == "carbon dioxide (lbs/mwh)") |>
+        pull(Value) |> 
+        str_replace_all(",", "") |>
+        as.numeric()
+    
+    PRIMARY <- TABLE |> 
+        filter(Item == "primary energy source") |> 
+        pull(Rank)
+    
+    RATE <- TABLE |>
+        filter(Item == "average retail price (cents/kwh)") |>
+        pull(Value) |>
+        as.numeric()
+    
+    GENERATION_MWh <- TABLE |>
+        filter(Item == "net generation (megawatthours)") |>
+        pull(Value) |>
+        str_replace_all(",", "") |>
+        as.numeric()
+    
+    data.frame(CO2_MWh               = CO2_MWh, 
+               primary_source        = PRIMARY,
+               electricity_price_MWh = RATE * 10, # / 100 cents to dollars &
+               # * 1000 kWh to MWH 
+               generation_MWh        = GENERATION_MWh, 
+               state                 = state, 
+               abbreviation          = abbr
+    )
+}
+
+EIA_SEP_REPORT <- map2(state.name, state.abb, get_eia_sep) |> list_rbind()
+```
+
+
+```{r}
+#| eval: true
+#| include: false
+load_ntd_energy <- function(){
+  library(readxl)
+  library(httr2)
+  library(tidyverse)
+  library(fs)
+  
+  # Create 'data/mp02' directory if not already present
+  DATA_DIR <- fs::path("data", "mp02")
+  fs::dir_create(DATA_DIR, recurse=TRUE)
+
+  NTD_ENERGY_FILE <- fs::path(DATA_DIR, "2025_ntd_energy.xlsx")
+
+  if(!fs::file_exists(NTD_ENERGY_FILE)){
+    library(httr2)
+  
+    request("https://www.transit.dot.gov/") |>
+      req_url_path("sites",
+                   "fta.dot.gov",
+                   "files",
+                   "2026-09",
+                   "2025 Energy Consumption_260806.xlsx") |> 
+      req_headers(
+        `User-Agent` = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:149.0) Gecko/20100101 Firefox/149.0") |> 
+      req_perform(NTD_ENERGY_FILE)
+  }
+  
+  if(file.info(NTD_ENERGY_FILE)$size < 1e4){
+        cat("I was unable to download the NTD Energy File. Please try again.\n")
+        stop("Download failed. Please delete the corrupted file by running `unlink('data/mp02/2025_ntd_energy.xlsx')` and try again.")
+    }
+
+  to_numeric_fill_0 <- function(x){
+    x <- if_else(x == "-", NA, x)
+    replace_na(as.numeric(x), 0)
+  }
+
+  read_excel(NTD_ENERGY_FILE) |> 
+    select(-c(`Reporter Type`, 
+              `Reporting Module`, 
+              `Gallons of Other Fuel`, 
+              `Other Fuel Description`)) |>
+    mutate(across(-c(`Agency Name`, 
+                     `Mode`,
+                     `TOS`), 
+                  to_numeric_fill_0)) |>
+    group_by(`NTD ID`, `Mode`, `Agency Name`) |>
+    summarize(across(where(is.numeric), sum), 
+              .groups = "keep") |>
+    mutate(ENERGY = sum(c_across(c(where(is.numeric))))) |>
+    filter(ENERGY > 0) |>
+    select(-ENERGY) |>
+    ungroup()
+}
+
+NTD_ENERGY <- load_ntd_energy()
+```
+
+
+```{r}
+#| eval: true
+#| include: false
+load_ntd_service <- function(){
+  library(httr2)
+  library(tidyverse)
+  library(fs)
+  
+  # Create 'data/mp02' directory if not already present
+  DATA_DIR <- fs::path("data", "mp02")
+  fs::dir_create(DATA_DIR, recurse=TRUE)
+
+  NTD_SERVICE_FILE <- fs::path(DATA_DIR, "2025_ntd_service.csv")
+
+  if(!fs::file_exists(NTD_SERVICE_FILE)){
+    library(httr2)
+  
+    request("https://data.transportation.gov/resource/4fir-qbim.csv") |>
+      req_url_query(`$query`=paste(
+        "SELECT  `_5_digit_ntd_id` AS `NTD_ID`", 
+        "`max_agency` AS `AGENCY`",
+        "`max_reporter_type` AS `reporter_type`",
+        "`max_organization_type` AS `organization_type`",
+        "`max_city` AS `city`",
+        "`max_state` AS `state`",
+        "`mode`",
+        "`type_of_service`",
+        "`max_primary_uza_code` as `uza_code`",
+        "`max_primary_uza_name` as `uza_name`",
+        "`max_primary_uza_area_sq_miles` as `uza_sq_miles`",
+        "`max_primary_uza_population` as `uza_population`",
+        "`max_service_area_sq_miles` as `service_area_sq_miles`",
+        "`max_service_area_population` as `service_area_population`",
+        "`questionable_record` as `flagged_likely_inaccurate`",
+        "`sum_unlinked_passenger_trips_upt` as `total_upt`",
+        "`sum_passenger_miles` WHERE caseless_one_of(`report_year`, '2025') limit 50000", 
+        sep=",")) |>
+      req_headers(
+        `User-Agent` = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:149.0) Gecko/20100101 Firefox/149.0") |> 
+      req_perform(NTD_SERVICE_FILE)
+  }
+  
+  if(file.info(NTD_SERVICE_FILE)$size < 1e4){
+        cat("I was unable to download the NTD Service File. Please try again.\n")
+        stop("Download failed. Please delete the corrupted file by running `unlink('data/mp02/2025_ntd_service.xlsx')` and try again.")
+    }
+
+  read_csv(NTD_SERVICE_FILE) |>
+    mutate(flagged_likely_inaccurate = !is.na(flagged_likely_inaccurate))
+}
+
+NTD_SERVICE <- load_ntd_service()
+```
+
+```{r}
+#| eval: true
+#| include: false
+NTD_ENERGY |> distinct(Mode) |> arrange(Mode)
+
+```
+```{r}
+#| eval: true
+#| include: false
+NTD_ENERGY <- NTD_ENERGY |>
+    mutate(Mode=recode_values(Mode, 
+        "HR" ~ "Heavy Rail", 
+        "AR" ~ "Alaska Railroad",
+        "CB" ~ "Commuter Bus",
+        "CC" ~ "Cable Car",
+        "CR" ~ "Commuter Rail",
+        "DR" ~ "Demand Response",
+        "FB" ~ "Ferryboat",
+        "HR" ~ "Heavy Rail",
+        "IP" ~ "Inclined Plane",
+        "LR" ~ "Light Rail",
+        "MB" ~ "Bus",
+        default="Unknown"))
+
+NTD_ENERGY |> filter(Mode == "Unknown")
+```
+```{r}
+#| eval: true
+#| include: false
+library(tidyverse)
+library(gt)    
+```
+
+
+
+## Which 5 states have the most expensive retail electricity?
+```{r}
+EIA_SEP_REPORT |>
+    slice_max(electricity_price_MWh, n = 5) |>
+    ggplot(aes(x = reorder(state, electricity_price_MWh),
+               y = electricity_price_MWh)) +
+    geom_col(fill = "steelblue") +
+    coord_flip() +
+    labs(title = "Top 5 States by Retail Electricity Price",
+         x = NULL,
+         y = "Average Retail Price ($/MWh)") +
+    theme_minimal()
+```
+## Which 5 states have the ‘dirtiest’ electricity mix?
+```{r}
+EIA_SEP_REPORT |>
+    slice_max(CO2_MWh, n = 5) |>
+    select(state, CO2_MWh, primary_source) |>
+    gt() |>
+    cols_label(state = "State",
+               CO2_MWh = "CO2 (lbs/MWh)",
+               primary_source = "Primary Source") |>
+    fmt_number(CO2_MWh, decimals = 0) |>
+    tab_header(title = "Top 5 States by CO2 Emissions per MWh")
+```
+
+
+```{r}
+us_avg_co2 <- EIA_SEP_REPORT |>
+    summarize(avg = sum(CO2_MWh * generation_MWh) / sum(generation_MWh)) |>
+    pull(avg)
+```
+
+
+
+
+```{r}
+EIA_SEP_REPORT |>
+    group_by(primary_source) |>
+    summarize(n_states = n(),
+              avg_price_MWh = mean(electricity_price_MWh),
+              states = paste(state, collapse = ", ")) |>
+    slice_min(n_states, n = 3) |>
+    gt() |>
+    cols_label(primary_source = "Primary Source",
+               n_states = "# of States",
+               avg_price_MWh = "Avg Price ($/MWh)",
+               states = "States") |>
+    fmt_currency(avg_price_MWh, decimals = 0) |>
+    tab_header(title = "Rarest Primary Energy Sources in the US")
+```
+
+```{r}
+tx_co2 <- EIA_SEP_REPORT |> filter(abbreviation == "TX") |> pull(CO2_MWh)
+ny_co2 <- EIA_SEP_REPORT |> filter(abbreviation == "NY") |> pull(CO2_MWh)
+ratio  <- tx_co2 / ny_co2
+```
+Nationwide, every 1 MWh of electricity generated in the United States emits an average of `r round(us_avg_co2)` pounds of CO2 per MWh of electricity generated.
+Texas emits `r round(tx_co2)` lbs of CO2 per MWh, compared with `r round(ny_co2)` lbs in New York, so New York's electricity mix is about `r round(ratio, 1)` times cleaner than Texas's.
+This means that the same electric bus can be drastically different in terms of "greenness" depending on the state.
+
+
+
+
+```{r}
+#| eval: true
+#| include: false
+#fuel data type
+library(tidyverse)
+library(gt)
+
+glimpse(NTD_ENERGY)    
+
+ 
+fuel_cols <- NTD_ENERGY |>
+    select(where(is.numeric), -`NTD ID`) |>
+    names()
+
+electric_cols <- c("Electric Battery", "Electric Propulsion")
+gallon_cols   <- setdiff(fuel_cols, electric_cols)
+
+fuel_cols    
+```
+
+
+### Evaluation Methodology
+
+To ensure a fair comparison, we calculated a "carbon account" for each organization:
+
+- **Fuel Components**: Converted each gallon of fuel (diesel, gasoline, biodiesel, natural gas, etc.) to CO2 using the emission coefficients published by the EIA.
+
+
+
+
+
+
+```{r}
+#the most 5 ag fuel
+top5_fuel <- NTD_ENERGY |>
+    group_by(`NTD ID`, `Agency Name`) |>
+    summarize(across(all_of(gallon_cols), sum), .groups = "drop") |>
+    mutate(Total = rowSums(across(all_of(gallon_cols)))) |>
+    slice_max(Total, n = 5) |>
+    select(-`NTD ID`) |>
+    select(where(~ !is.numeric(.x) || sum(.x) > 0))   # delete the useless
+
+top5_fuel |>
+    gt() |>
+    fmt_number(-`Agency Name`, decimals = 0) |>
+    tab_header(title = "Top 5 Transit Agencies by Fuel Use",
+               subtitle = "Gallons, excluding electricity")
+```
+
+
+```{r}
+
+fuel_totals <- NTD_ENERGY |>
+    summarize(across(all_of(fuel_cols), sum)) |>
+    pivot_longer(everything(), names_to = "Fuel", values_to = "Amount") |>
+    filter(Amount > 0) |>
+    mutate(Unit = if_else(Fuel %in% electric_cols, "kWh", "Gallons"))
+
+ggplot(fuel_totals, aes(x = reorder(Fuel, Amount), y = Amount, fill = Unit)) +
+    geom_col() +
+    coord_flip() +
+    facet_wrap(~ Unit, scales = "free") +
+    scale_y_log10(labels = scales::label_comma()) +
+    labs(title = "Total Fuel Use Across US Public Transit",
+         x = NULL, y = "Amount (log scale)") +
+    theme_minimal() +
+    theme(legend.position = "none")
+```
+
+
+
+```{r}
+
+fuel_usage <- NTD_ENERGY |>
+    summarize(across(all_of(fuel_cols), ~ sum(.x > 0))) |>
+    pivot_longer(everything(), names_to = "Fuel", values_to = "n_users") |>
+    filter(n_users > 0) |>
+    arrange(n_users)
+
+least_fuel   <- fuel_usage$Fuel[1]
+least_n      <- fuel_usage$n_users[1]
+
+
+least_gallon <- fuel_totals |>
+    filter(Unit == "Gallons") |>
+    slice_min(Amount, n = 1)
+```
+The least commonly used fuel source in US public transit is `r least_fuel`, used by only `r least_n` agency–mode combinations.
+
+
+
+```{r}
+#| eval: true
+#| include: false
+#  NTD_SERVICE
+recode_mode <- function(x){
+    recode_values(x,
+        "AR" ~ "Alaska Railroad",     "CB" ~ "Commuter Bus",
+        "CC" ~ "Cable Car",           "CR" ~ "Commuter Rail",
+        "DR" ~ "Demand Response",     "DT" ~ "Demand Response - Taxi",
+        "FB" ~ "Ferryboat",           "HR" ~ "Heavy Rail",
+        "IP" ~ "Inclined Plane",      "LR" ~ "Light Rail",
+        "MB" ~ "Bus",                 "MG" ~ "Monorail/Automated Guideway",
+        "PB" ~ "Publico",             "RB" ~ "Bus Rapid Transit",
+        "SR" ~ "Streetcar Rail",      "TB" ~ "Trolleybus",
+        "TR" ~ "Aerial Tramway",      "VP" ~ "Vanpool",
+        "YR" ~ "Hybrid Rail",
+        default = "Unknown")
+}
+
+SERVICE_BY_MODE <- NTD_SERVICE |>
+    mutate(NTD_ID = as.numeric(NTD_ID),
+           Mode   = recode_mode(mode)) |>
+    group_by(NTD_ID, Mode) |>
+    summarize(Agency          = first(AGENCY),
+              state           = first(state),
+              total_upt       = sum(total_upt, na.rm = TRUE),
+              passenger_miles = sum(sum_passenger_miles, na.rm = TRUE),
+              .groups = "drop")
+
+# check Agency + Mode  
+SERVICE_BY_MODE |> count(NTD_ID, Mode) |> filter(n > 1)
+```
+```{r}
+# 3tables inner join
+EMISSIONS <- NTD_ENERGY |>
+    mutate(`NTD ID` = as.numeric(`NTD ID`)) |>
+    inner_join(SERVICE_BY_MODE,
+               join_by(`NTD ID` == NTD_ID, Mode == Mode)) |>
+    inner_join(EIA_SEP_REPORT |> select(abbreviation, CO2_MWh),
+               join_by(state == abbreviation))
+```
+
+```{r}
+
+EMISSIONS <- EMISSIONS |>
+    mutate(total_CO2_lbs =
+        `Gallons of Diesel Fuel`               * 22.45 +
+        `Gallons of Bio-Diesel`                * 22.45 +
+        `Gallons of Gasoline`                  * 18.73 +
+        `Gallons of Kerosene`                  * 21.78 +
+        `Gallons of Liquified Petroleum Gas`   * 12.68 +
+        `Gallons of Bunker Fuel`               * 24.78 +
+        `Gallons of Compressed Natural Gas`    * 15.31 +
+        `Gallons of Liquified Nat Gas`         *  9.98 +
+        `Gallons of Ethanol`                   *  0    +
+        `Kilograms of Hydrogen`                *  0    +
+        (`Kilowatt hours of Electric Battery` +
+         `Kilowatt hours of Electric Propulsion`) / 1000 * CO2_MWh,
+        total_CO2_tons = total_CO2_lbs / 2000)
+```
+
+```{r}
+EMISSIONS |>
+    select(`Agency Name`, Mode, state, total_CO2_tons) |>
+    slice_max(total_CO2_tons, n = 10)
+
+  
+```
+```{r}
+
+AGENCY_EMISSIONS <- EMISSIONS |>
+    group_by(`NTD ID`, Agency, state) |>
+    summarize(total_CO2_lbs   = sum(total_CO2_lbs),
+              total_upt       = sum(total_upt),
+              passenger_miles = sum(passenger_miles),
+              .groups = "drop") |>
+    mutate(CO2_per_UPT = total_CO2_lbs / total_upt,
+           CO2_per_PM  = total_CO2_lbs / passenger_miles)
+```
+- **Totaling**: Added together the emissions from all modes of transportation (buses, subways, ferries, etc.) for the same organization.
+- **Standardization**: Divided by the **Annual Passenger Trips (UPT)** and **Passenger Miles** to obtain "emissions per passenger trip" and "emissions per passenger mile."
+
+```{r}
+AGENCY_EMISSIONS <- AGENCY_EMISSIONS |>
+    filter(total_upt >= 100000,           
+           passenger_miles > 0) |>
+    mutate(size = case_when(
+        total_upt <  1e6  ~ "Small",     
+        total_upt <  2e7  ~ "Medium",    
+        TRUE              ~ "Large"      
+    ),
+    size = factor(size, levels = c("Small", "Medium", "Large")))
+
+AGENCY_EMISSIONS |> count(size)          
+```
+To avoid pitting elephants against ants, we eliminated extremely small organizations with fewer than 100,000 passengers annually and categorized the remaining organizations into three groups based on passenger volume: **small** (less than 1 million passengers), **medium** (1 million to 20 million passengers), and **large** (more than 20 million passengers).
+
+
+### Best Award: Greenest Transportation Organization of the Year
+
+**Large Group Winner: Tri-County Metropolitan Transportation District of Oregon (TriMet)**
+
+TriMet emits only **0.40 pounds of CO2** per passenger and an even lower **0.10 pounds** per passenger-mile.  
+
+Portland's remarkably low carbon footprint is attributed to both its light rail network and Oregon's hydroelectric power grid. Traveling by TriMet truly offers a "green light" experience.
+
+**Mid-sized Group Champion: Anaheim Transportation Network (California)**
+
+Emissions are only **0.20 lbs** per passenger trip and **0.14 lbs** per passenger mile. Even in California, where electricity prices are among the highest in the nation, Anaheim ensures every kilowatt-hour is used efficiently, proving that "expensive" doesn't equate to "dirty."
+
+**Small Group Champion: Chicago Water Taxi (Wendella, Illinois)**
+
+Emissions are **0.94 lbs** per passenger trip and **0.50 lbs** per passenger mile. Who says green travel is only for land? This water taxi company has "ridden the waves," dominating the small group and making commuting on the Chicago River a truly "green" experience.
+```{r}
+greenest_upt <- AGENCY_EMISSIONS |>
+    group_by(size) |>
+    slice_min(CO2_per_UPT, n = 1) |>
+    ungroup()
+
+greenest_pm <- AGENCY_EMISSIONS |>
+    group_by(size) |>
+    slice_min(CO2_per_PM, n = 1) |>
+    ungroup()
+
+greenest_upt |>
+    select(size, Agency, state, CO2_per_UPT, CO2_per_PM) |>
+    gt() |>
+    fmt_number(c(CO2_per_UPT, CO2_per_PM), decimals = 2) |>
+    cols_label(size = "Size", Agency = "Agency", state = "State",
+               CO2_per_UPT = "lbs CO2 / UPT",
+               CO2_per_PM  = "lbs CO2 / Passenger Mile") |>
+    tab_header(title = "Greenest Transit Agencies (per UPT)")
+
+greenest_pm |>
+    select(size, Agency, state, CO2_per_PM, CO2_per_UPT) |>
+    gt() |>
+    fmt_number(c(CO2_per_PM, CO2_per_UPT), decimals = 2) |>
+    cols_label(size = "Size", Agency = "Agency", state = "State",
+               CO2_per_PM  = "lbs CO2 / Passenger Mile",
+               CO2_per_UPT = "lbs CO2 / UPT") |>
+    tab_header(title = "Greenest Transit Agencies (per Passenger Mile)")
+```
+###  Worst of the Year Award: The "Worst $Agency" Award
+```{r}
+worst <- AGENCY_EMISSIONS |>
+    filter(size %in% c("Medium", "Large")) |>
+    slice_max(CO2_per_PM, n = 1)
+
+
+
+AGENCY_EMISSIONS |>
+    filter(size %in% c("Medium", "Large")) |>
+    slice_max(CO2_per_PM, n = 10) |>
+    mutate(label    = str_trunc(Agency, 40),
+           is_worst = Agency == worst$Agency) |>
+    ggplot(aes(x = reorder(label, CO2_per_PM), y = CO2_per_PM, fill = is_worst)) +
+    geom_col() +
+    geom_hline(yintercept = 0.89, linetype = "dotted", color = "red") +
+    annotate("text", x = 1, y = 0.89, label = "Typical car",
+             hjust = -0.05, vjust = -0.5, size = 3, color = "red") +
+    scale_fill_manual(values = c("grey70", "firebrick"), guide = "none") +
+    coord_flip() +
+    labs(title = "The Least Green Medium & Large Transit Agencies",
+         subtitle = paste0("Dishonorable mention: ", str_trunc(worst$Agency, 50)),
+         x = NULL, y = "lbs CO2 per passenger mile") +
+    theme_minimal()
+```
+
+While some rejoice, others are left feeling utterly embarrassed.
+
+This year's Worst of the Year award goes to **`r worst$Agency`** (`r worst$state`).
+
+**Method of Evaluation**: Comparing CO2 emissions per passenger mile across medium and large agencies.
+
+**Its Performance**: Emits **`r round(worst$CO2_per_PM, 2)` pounds of CO2 per passenger mile**, on the top of the place.
+
+
+### Conclusion
+
+ 
+Public transportation is a great help for green travel, but being "green" isn't automatically achieved by simply taking the bus: energy mix, the state's power grid, and passenger volume all influence the final carbon bill. Congratulations to all the award winners, and we look forward to seeing more organizations join the ranks of carbon reduction next year.
+
+See you next time!
+
+
+
+
