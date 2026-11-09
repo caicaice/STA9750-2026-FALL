@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Mini-Project Placeholder – STA 9750 Submission Material</title>
+<title>U.S. Energy: 2025 National Green Transportation Awards – STA 9750 Submission Material</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -25,6 +25,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -103,7 +138,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Mini-Project Placeholder</h1>
+<h1 class="title">U.S. Energy: 2025 National Green Transportation Awards</h1>
 </div>
 
 
@@ -120,9 +155,2845 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>This is a placeholder for STA9750 Mini-Project 2. Check back soon for more!</p>
+<p>Welcome to U.S. Energy! Today’s topic is the Green Transportation Awards. All public transportation providers across the U.S. are eligible for awards in 2025, and we’ll be revealing the best and worst performers of the year.</p>
+<p>Let’s begin today’s program.</p>
+<p>People are increasingly prioritizing green transportation and opting for public transport. However, public transport itself often comes with considerable carbon emissions. Despite various energy sources being explored, the cost remains high: the five states with the most expensive electricity are Hawaii, California, Connecticut, Rhode Island, and Massachusetts. The five states with the highest carbon intensity for electricity are West Virginia, Kentucky, Wyoming, Missouri, and Hawaii. Hawaii is on both lists, boasting both expensive and “dirty” electricity, making it a “double champion.”</p>
+<section id="which-5-states-have-the-most-expensive-retail-electricity" class="level2">
+<h2 class="anchored" data-anchor-id="which-5-states-have-the-most-expensive-retail-electricity">Which 5 states have the most expensive retail electricity?</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>EIA_SEP_REPORT <span class="sc">|&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">slice_max</span>(electricity_price_MWh, <span class="at">n =</span> <span class="dv">5</span>) <span class="sc">|&gt;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(state, electricity_price_MWh),</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">y =</span> electricity_price_MWh)) <span class="sc">+</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Top 5 States by Retail Electricity Price"</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">x =</span> <span class="cn">NULL</span>,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="st">"Average Retail Price ($/MWh)"</span>) <span class="sc">+</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="mp02_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="which-5-states-have-the-dirtiest-electricity-mix" class="level2">
+<h2 class="anchored" data-anchor-id="which-5-states-have-the-dirtiest-electricity-mix">Which 5 states have the ‘dirtiest’ electricity mix?</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>EIA_SEP_REPORT <span class="sc">|&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">slice_max</span>(CO2_MWh, <span class="at">n =</span> <span class="dv">5</span>) <span class="sc">|&gt;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(state, CO2_MWh, primary_source) <span class="sc">|&gt;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cols_label</span>(<span class="at">state =</span> <span class="st">"State"</span>,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">CO2_MWh =</span> <span class="st">"CO2 (lbs/MWh)"</span>,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">primary_source =</span> <span class="st">"Primary Source"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">fmt_number</span>(CO2_MWh, <span class="at">decimals =</span> <span class="dv">0</span>) <span class="sc">|&gt;</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tab_header</span>(<span class="at">title =</span> <span class="st">"Top 5 States by CO2 Emissions per MWh"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div id="stcpccwtqm" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#stcpccwtqm table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#stcpccwtqm thead, #stcpccwtqm tbody, #stcpccwtqm tfoot, #stcpccwtqm tr, #stcpccwtqm td, #stcpccwtqm th {
+  border-style: none;
+}
+
+#stcpccwtqm p {
+  margin: 0;
+  padding: 0;
+}
+
+#stcpccwtqm .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#stcpccwtqm .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#stcpccwtqm .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#stcpccwtqm .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#stcpccwtqm .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#stcpccwtqm .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#stcpccwtqm .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#stcpccwtqm .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#stcpccwtqm .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#stcpccwtqm .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#stcpccwtqm .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#stcpccwtqm .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#stcpccwtqm .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#stcpccwtqm .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#stcpccwtqm .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#stcpccwtqm .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#stcpccwtqm .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#stcpccwtqm .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#stcpccwtqm .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#stcpccwtqm .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#stcpccwtqm .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#stcpccwtqm .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#stcpccwtqm .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#stcpccwtqm .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#stcpccwtqm .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#stcpccwtqm .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#stcpccwtqm .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#stcpccwtqm .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#stcpccwtqm .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#stcpccwtqm .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#stcpccwtqm .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#stcpccwtqm .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#stcpccwtqm .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#stcpccwtqm .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#stcpccwtqm .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#stcpccwtqm .gt_left {
+  text-align: left;
+}
+
+#stcpccwtqm .gt_center {
+  text-align: center;
+}
+
+#stcpccwtqm .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#stcpccwtqm .gt_font_normal {
+  font-weight: normal;
+}
+
+#stcpccwtqm .gt_font_bold {
+  font-weight: bold;
+}
+
+#stcpccwtqm .gt_font_italic {
+  font-style: italic;
+}
+
+#stcpccwtqm .gt_super {
+  font-size: 65%;
+}
+
+#stcpccwtqm .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#stcpccwtqm .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#stcpccwtqm .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#stcpccwtqm .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#stcpccwtqm .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#stcpccwtqm .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#stcpccwtqm .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#stcpccwtqm .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#stcpccwtqm div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_heading header">
+<td colspan="3" class="gt_heading gt_title gt_font_normal gt_bottom_border">Top 5 States by CO2 Emissions per MWh</td>
+</tr>
+<tr class="gt_col_headings even">
+<th id="state" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">State</th>
+<th id="CO2_MWh" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">CO2 (lbs/MWh)</th>
+<th id="primary_source" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Primary Source</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="state">West Virginia</td>
+<td class="gt_row gt_right" headers="CO2_MWh">1,912</td>
+<td class="gt_row gt_left" headers="primary_source">Coal</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="state">Kentucky</td>
+<td class="gt_row gt_right" headers="CO2_MWh">1,744</td>
+<td class="gt_row gt_left" headers="primary_source">Coal</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="state">Wyoming</td>
+<td class="gt_row gt_right" headers="CO2_MWh">1,724</td>
+<td class="gt_row gt_left" headers="primary_source">Coal</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="state">Missouri</td>
+<td class="gt_row gt_right" headers="CO2_MWh">1,456</td>
+<td class="gt_row gt_left" headers="primary_source">Coal</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="state">Hawaii</td>
+<td class="gt_row gt_right" headers="CO2_MWh">1,426</td>
+<td class="gt_row gt_left" headers="primary_source">Petroleum</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>us_avg_co2 <span class="ot">&lt;-</span> EIA_SEP_REPORT <span class="sc">|&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="at">avg =</span> <span class="fu">sum</span>(CO2_MWh <span class="sc">*</span> generation_MWh) <span class="sc">/</span> <span class="fu">sum</span>(generation_MWh)) <span class="sc">|&gt;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pull</span>(avg)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>EIA_SEP_REPORT <span class="sc">|&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(primary_source) <span class="sc">|&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="at">n_states =</span> <span class="fu">n</span>(),</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">avg_price_MWh =</span> <span class="fu">mean</span>(electricity_price_MWh),</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">states =</span> <span class="fu">paste</span>(state, <span class="at">collapse =</span> <span class="st">", "</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">slice_min</span>(n_states, <span class="at">n =</span> <span class="dv">3</span>) <span class="sc">|&gt;</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cols_label</span>(<span class="at">primary_source =</span> <span class="st">"Primary Source"</span>,</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>               <span class="at">n_states =</span> <span class="st">"# of States"</span>,</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>               <span class="at">avg_price_MWh =</span> <span class="st">"Avg Price ($/MWh)"</span>,</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>               <span class="at">states =</span> <span class="st">"States"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">fmt_currency</span>(avg_price_MWh, <span class="at">decimals =</span> <span class="dv">0</span>) <span class="sc">|&gt;</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tab_header</span>(<span class="at">title =</span> <span class="st">"Rarest Primary Energy Sources in the US"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div id="bxtrifnway" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#bxtrifnway table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#bxtrifnway thead, #bxtrifnway tbody, #bxtrifnway tfoot, #bxtrifnway tr, #bxtrifnway td, #bxtrifnway th {
+  border-style: none;
+}
+
+#bxtrifnway p {
+  margin: 0;
+  padding: 0;
+}
+
+#bxtrifnway .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#bxtrifnway .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#bxtrifnway .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#bxtrifnway .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#bxtrifnway .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#bxtrifnway .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#bxtrifnway .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#bxtrifnway .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#bxtrifnway .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#bxtrifnway .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#bxtrifnway .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#bxtrifnway .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#bxtrifnway .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#bxtrifnway .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#bxtrifnway .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#bxtrifnway .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#bxtrifnway .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#bxtrifnway .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#bxtrifnway .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#bxtrifnway .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#bxtrifnway .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#bxtrifnway .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#bxtrifnway .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#bxtrifnway .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#bxtrifnway .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#bxtrifnway .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#bxtrifnway .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#bxtrifnway .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#bxtrifnway .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#bxtrifnway .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#bxtrifnway .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#bxtrifnway .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#bxtrifnway .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#bxtrifnway .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#bxtrifnway .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#bxtrifnway .gt_left {
+  text-align: left;
+}
+
+#bxtrifnway .gt_center {
+  text-align: center;
+}
+
+#bxtrifnway .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#bxtrifnway .gt_font_normal {
+  font-weight: normal;
+}
+
+#bxtrifnway .gt_font_bold {
+  font-weight: bold;
+}
+
+#bxtrifnway .gt_font_italic {
+  font-style: italic;
+}
+
+#bxtrifnway .gt_super {
+  font-size: 65%;
+}
+
+#bxtrifnway .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#bxtrifnway .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#bxtrifnway .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#bxtrifnway .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#bxtrifnway .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#bxtrifnway .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#bxtrifnway .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#bxtrifnway .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#bxtrifnway div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_heading header">
+<td colspan="4" class="gt_heading gt_title gt_font_normal gt_bottom_border">Rarest Primary Energy Sources in the US</td>
+</tr>
+<tr class="gt_col_headings even">
+<th id="primary_source" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Primary Source</th>
+<th id="n_states" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"># of States</th>
+<th id="avg_price_MWh" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Avg Price ($/MWh)</th>
+<th id="states" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">States</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="primary_source">Petroleum</td>
+<td class="gt_row gt_right" headers="n_states">1</td>
+<td class="gt_row gt_right" headers="avg_price_MWh">$380</td>
+<td class="gt_row gt_left" headers="states">Hawaii</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="primary_source">Hydroelectric</td>
+<td class="gt_row gt_right" headers="n_states">4</td>
+<td class="gt_row gt_right" headers="avg_price_MWh">$123</td>
+<td class="gt_row gt_left" headers="states">Idaho, Oregon, Vermont, Washington</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="primary_source">Wind</td>
+<td class="gt_row gt_right" headers="n_states">4</td>
+<td class="gt_row gt_right" headers="avg_price_MWh">$102</td>
+<td class="gt_row gt_left" headers="states">Iowa, Kansas, New Mexico, South Dakota</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>tx_co2 <span class="ot">&lt;-</span> EIA_SEP_REPORT <span class="sc">|&gt;</span> <span class="fu">filter</span>(abbreviation <span class="sc">==</span> <span class="st">"TX"</span>) <span class="sc">|&gt;</span> <span class="fu">pull</span>(CO2_MWh)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>ny_co2 <span class="ot">&lt;-</span> EIA_SEP_REPORT <span class="sc">|&gt;</span> <span class="fu">filter</span>(abbreviation <span class="sc">==</span> <span class="st">"NY"</span>) <span class="sc">|&gt;</span> <span class="fu">pull</span>(CO2_MWh)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>ratio  <span class="ot">&lt;-</span> tx_co2 <span class="sc">/</span> ny_co2</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>Nationwide, every 1 MWh of electricity generated in the United States emits an average of 785 pounds of CO2 per MWh of electricity generated. Texas emits 823 lbs of CO2 per MWh, compared with 537 lbs in New York, so New York’s electricity mix is about 1.5 times cleaner than Texas’s. This means that the same electric bus can be drastically different in terms of “greenness” depending on the state.</p>
+<section id="evaluation-methodology" class="level3">
+<h3 class="anchored" data-anchor-id="evaluation-methodology">Evaluation Methodology</h3>
+<p>To ensure a fair comparison, we calculated a “carbon account” for each organization:</p>
+<ul>
+<li><strong>Fuel Components</strong>: Converted each gallon of fuel (diesel, gasoline, biodiesel, natural gas, etc.) to CO2 using the emission coefficients published by the EIA.</li>
+</ul>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#the most 5 ag fuel</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>top5_fuel <span class="ot">&lt;-</span> NTD_ENERGY <span class="sc">|&gt;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(<span class="st">`</span><span class="at">NTD ID</span><span class="st">`</span>, <span class="st">`</span><span class="at">Agency Name</span><span class="st">`</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="fu">across</span>(<span class="fu">all_of</span>(gallon_cols), sum), <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">Total =</span> <span class="fu">rowSums</span>(<span class="fu">across</span>(<span class="fu">all_of</span>(gallon_cols)))) <span class="sc">|&gt;</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">slice_max</span>(Total, <span class="at">n =</span> <span class="dv">5</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span><span class="st">`</span><span class="at">NTD ID</span><span class="st">`</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="fu">where</span>(<span class="sc">~</span> <span class="sc">!</span><span class="fu">is.numeric</span>(.x) <span class="sc">||</span> <span class="fu">sum</span>(.x) <span class="sc">&gt;</span> <span class="dv">0</span>))   <span class="co"># delete the useless</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>top5_fuel <span class="sc">|&gt;</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">fmt_number</span>(<span class="sc">-</span><span class="st">`</span><span class="at">Agency Name</span><span class="st">`</span>, <span class="at">decimals =</span> <span class="dv">0</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tab_header</span>(<span class="at">title =</span> <span class="st">"Top 5 Transit Agencies by Fuel Use"</span>,</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>               <span class="at">subtitle =</span> <span class="st">"Gallons, excluding electricity"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div id="wvfhhtkjrc" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#wvfhhtkjrc table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#wvfhhtkjrc thead, #wvfhhtkjrc tbody, #wvfhhtkjrc tfoot, #wvfhhtkjrc tr, #wvfhhtkjrc td, #wvfhhtkjrc th {
+  border-style: none;
+}
+
+#wvfhhtkjrc p {
+  margin: 0;
+  padding: 0;
+}
+
+#wvfhhtkjrc .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#wvfhhtkjrc .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#wvfhhtkjrc .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#wvfhhtkjrc .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#wvfhhtkjrc .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#wvfhhtkjrc .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#wvfhhtkjrc .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#wvfhhtkjrc .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#wvfhhtkjrc .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#wvfhhtkjrc .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#wvfhhtkjrc .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#wvfhhtkjrc .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#wvfhhtkjrc .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#wvfhhtkjrc .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#wvfhhtkjrc .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#wvfhhtkjrc .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#wvfhhtkjrc .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#wvfhhtkjrc .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#wvfhhtkjrc .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#wvfhhtkjrc .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#wvfhhtkjrc .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#wvfhhtkjrc .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#wvfhhtkjrc .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#wvfhhtkjrc .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#wvfhhtkjrc .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#wvfhhtkjrc .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#wvfhhtkjrc .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#wvfhhtkjrc .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#wvfhhtkjrc .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#wvfhhtkjrc .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#wvfhhtkjrc .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#wvfhhtkjrc .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#wvfhhtkjrc .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#wvfhhtkjrc .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#wvfhhtkjrc .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#wvfhhtkjrc .gt_left {
+  text-align: left;
+}
+
+#wvfhhtkjrc .gt_center {
+  text-align: center;
+}
+
+#wvfhhtkjrc .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#wvfhhtkjrc .gt_font_normal {
+  font-weight: normal;
+}
+
+#wvfhhtkjrc .gt_font_bold {
+  font-weight: bold;
+}
+
+#wvfhhtkjrc .gt_font_italic {
+  font-style: italic;
+}
+
+#wvfhhtkjrc .gt_super {
+  font-size: 65%;
+}
+
+#wvfhhtkjrc .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#wvfhhtkjrc .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#wvfhhtkjrc .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#wvfhhtkjrc .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#wvfhhtkjrc .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#wvfhhtkjrc .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#wvfhhtkjrc .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#wvfhhtkjrc .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#wvfhhtkjrc div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_heading header">
+<td colspan="7" class="gt_heading gt_title gt_font_normal">Top 5 Transit Agencies by Fuel Use</td>
+</tr>
+<tr class="gt_heading even">
+<td colspan="7" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border">Gallons, excluding electricity</td>
+</tr>
+<tr class="gt_col_headings header">
+<th id="Agency-Name" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Agency Name</th>
+<th id="Gallons-of-Compressed-Natural-Gas" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Gallons of Compressed Natural Gas</th>
+<th id="Gallons-of-Diesel-Fuel" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Gallons of Diesel Fuel</th>
+<th id="Kilowatt-hours-of-Electric-Battery" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Kilowatt hours of Electric Battery</th>
+<th id="Kilowatt-hours-of-Electric-Propulsion" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Kilowatt hours of Electric Propulsion</th>
+<th id="Gallons-of-Gasoline" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Gallons of Gasoline</th>
+<th id="Total" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Total</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="Agency-Name">MTA New York City Transit</td>
+<td class="gt_row gt_right" headers="Gallons-of-Compressed-Natural-Gas">6,328,381</td>
+<td class="gt_row gt_right" headers="Gallons-of-Diesel-Fuel">30,217,934</td>
+<td class="gt_row gt_right" headers="Kilowatt-hours-of-Electric-Battery">2,384,527</td>
+<td class="gt_row gt_right" headers="Kilowatt-hours-of-Electric-Propulsion">1,676,745,570</td>
+<td class="gt_row gt_right" headers="Gallons-of-Gasoline">4,270,146</td>
+<td class="gt_row gt_right" headers="Total">1,719,946,558</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Agency-Name">Washington Metropolitan Area Transit Authority</td>
+<td class="gt_row gt_right" headers="Gallons-of-Compressed-Natural-Gas">4,815,778</td>
+<td class="gt_row gt_right" headers="Gallons-of-Diesel-Fuel">8,178,289</td>
+<td class="gt_row gt_right" headers="Kilowatt-hours-of-Electric-Battery">193,589</td>
+<td class="gt_row gt_right" headers="Kilowatt-hours-of-Electric-Propulsion">655,482,848</td>
+<td class="gt_row gt_right" headers="Gallons-of-Gasoline">1,468,593</td>
+<td class="gt_row gt_right" headers="Total">670,139,097</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Agency-Name">MTA Long Island Rail Road</td>
+<td class="gt_row gt_right" headers="Gallons-of-Compressed-Natural-Gas">0</td>
+<td class="gt_row gt_right" headers="Gallons-of-Diesel-Fuel">7,143,477</td>
+<td class="gt_row gt_right" headers="Kilowatt-hours-of-Electric-Battery">0</td>
+<td class="gt_row gt_right" headers="Kilowatt-hours-of-Electric-Propulsion">592,049,723</td>
+<td class="gt_row gt_right" headers="Gallons-of-Gasoline">0</td>
+<td class="gt_row gt_right" headers="Total">599,193,200</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Agency-Name">New Jersey Transit Corporation</td>
+<td class="gt_row gt_right" headers="Gallons-of-Compressed-Natural-Gas">1,521,492</td>
+<td class="gt_row gt_right" headers="Gallons-of-Diesel-Fuel">38,144,027</td>
+<td class="gt_row gt_right" headers="Kilowatt-hours-of-Electric-Battery">807,499</td>
+<td class="gt_row gt_right" headers="Kilowatt-hours-of-Electric-Propulsion">418,234,562</td>
+<td class="gt_row gt_right" headers="Gallons-of-Gasoline">2,055,895</td>
+<td class="gt_row gt_right" headers="Total">460,763,475</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Agency-Name">Metro-North Commuter Railroad Company, dba: MTA Metro-North Railroad</td>
+<td class="gt_row gt_right" headers="Gallons-of-Compressed-Natural-Gas">0</td>
+<td class="gt_row gt_right" headers="Gallons-of-Diesel-Fuel">7,576,382</td>
+<td class="gt_row gt_right" headers="Kilowatt-hours-of-Electric-Battery">0</td>
+<td class="gt_row gt_right" headers="Kilowatt-hours-of-Electric-Propulsion">452,387,021</td>
+<td class="gt_row gt_right" headers="Gallons-of-Gasoline">0</td>
+<td class="gt_row gt_right" headers="Total">459,963,403</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>fuel_totals <span class="ot">&lt;-</span> NTD_ENERGY <span class="sc">|&gt;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="fu">across</span>(<span class="fu">all_of</span>(fuel_cols), sum)) <span class="sc">|&gt;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_longer</span>(<span class="fu">everything</span>(), <span class="at">names_to =</span> <span class="st">"Fuel"</span>, <span class="at">values_to =</span> <span class="st">"Amount"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(Amount <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">Unit =</span> <span class="fu">if_else</span>(Fuel <span class="sc">%in%</span> electric_cols, <span class="st">"kWh"</span>, <span class="st">"Gallons"</span>))</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(fuel_totals, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(Fuel, Amount), <span class="at">y =</span> Amount, <span class="at">fill =</span> Unit)) <span class="sc">+</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span> Unit, <span class="at">scales =</span> <span class="st">"free"</span>) <span class="sc">+</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_log10</span>(<span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">label_comma</span>()) <span class="sc">+</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Total Fuel Use Across US Public Transit"</span>,</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>         <span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="st">"Amount (log scale)"</span>) <span class="sc">+</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="mp02_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>fuel_usage <span class="ot">&lt;-</span> NTD_ENERGY <span class="sc">|&gt;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="fu">across</span>(<span class="fu">all_of</span>(fuel_cols), <span class="sc">~</span> <span class="fu">sum</span>(.x <span class="sc">&gt;</span> <span class="dv">0</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_longer</span>(<span class="fu">everything</span>(), <span class="at">names_to =</span> <span class="st">"Fuel"</span>, <span class="at">values_to =</span> <span class="st">"n_users"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(n_users <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">|&gt;</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(n_users)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>least_fuel   <span class="ot">&lt;-</span> fuel_usage<span class="sc">$</span>Fuel[<span class="dv">1</span>]</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>least_n      <span class="ot">&lt;-</span> fuel_usage<span class="sc">$</span>n_users[<span class="dv">1</span>]</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>least_gallon <span class="ot">&lt;-</span> fuel_totals <span class="sc">|&gt;</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(Unit <span class="sc">==</span> <span class="st">"Gallons"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">slice_min</span>(Amount, <span class="at">n =</span> <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>The least commonly used fuel source in US public transit is Gallons of Liquified Nat Gas, used by only 1 agency–mode combinations.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 3tables inner join</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>EMISSIONS <span class="ot">&lt;-</span> NTD_ENERGY <span class="sc">|&gt;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="st">`</span><span class="at">NTD ID</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">as.numeric</span>(<span class="st">`</span><span class="at">NTD ID</span><span class="st">`</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">inner_join</span>(SERVICE_BY_MODE,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>               <span class="fu">join_by</span>(<span class="st">`</span><span class="at">NTD ID</span><span class="st">`</span> <span class="sc">==</span> NTD_ID, Mode <span class="sc">==</span> Mode)) <span class="sc">|&gt;</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">inner_join</span>(EIA_SEP_REPORT <span class="sc">|&gt;</span> <span class="fu">select</span>(abbreviation, CO2_MWh),</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>               <span class="fu">join_by</span>(state <span class="sc">==</span> abbreviation))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>EMISSIONS <span class="ot">&lt;-</span> EMISSIONS <span class="sc">|&gt;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">total_CO2_lbs =</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>        <span class="st">`</span><span class="at">Gallons of Diesel Fuel</span><span class="st">`</span>               <span class="sc">*</span> <span class="fl">22.45</span> <span class="sc">+</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">`</span><span class="at">Gallons of Bio-Diesel</span><span class="st">`</span>                <span class="sc">*</span> <span class="fl">22.45</span> <span class="sc">+</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">`</span><span class="at">Gallons of Gasoline</span><span class="st">`</span>                  <span class="sc">*</span> <span class="fl">18.73</span> <span class="sc">+</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">`</span><span class="at">Gallons of Kerosene</span><span class="st">`</span>                  <span class="sc">*</span> <span class="fl">21.78</span> <span class="sc">+</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">`</span><span class="at">Gallons of Liquified Petroleum Gas</span><span class="st">`</span>   <span class="sc">*</span> <span class="fl">12.68</span> <span class="sc">+</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">`</span><span class="at">Gallons of Bunker Fuel</span><span class="st">`</span>               <span class="sc">*</span> <span class="fl">24.78</span> <span class="sc">+</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">`</span><span class="at">Gallons of Compressed Natural Gas</span><span class="st">`</span>    <span class="sc">*</span> <span class="fl">15.31</span> <span class="sc">+</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>        <span class="st">`</span><span class="at">Gallons of Liquified Nat Gas</span><span class="st">`</span>         <span class="sc">*</span>  <span class="fl">9.98</span> <span class="sc">+</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>        <span class="st">`</span><span class="at">Gallons of Ethanol</span><span class="st">`</span>                   <span class="sc">*</span>  <span class="dv">0</span>    <span class="sc">+</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>        <span class="st">`</span><span class="at">Kilograms of Hydrogen</span><span class="st">`</span>                <span class="sc">*</span>  <span class="dv">0</span>    <span class="sc">+</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>        (<span class="st">`</span><span class="at">Kilowatt hours of Electric Battery</span><span class="st">`</span> <span class="sc">+</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>         <span class="st">`</span><span class="at">Kilowatt hours of Electric Propulsion</span><span class="st">`</span>) <span class="sc">/</span> <span class="dv">1000</span> <span class="sc">*</span> CO2_MWh,</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">total_CO2_tons =</span> total_CO2_lbs <span class="sc">/</span> <span class="dv">2000</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>EMISSIONS <span class="sc">|&gt;</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="st">`</span><span class="at">Agency Name</span><span class="st">`</span>, Mode, state, total_CO2_tons) <span class="sc">|&gt;</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">slice_max</span>(total_CO2_tons, <span class="at">n =</span> <span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 4
+   `Agency Name`                                      Mode  state total_CO2_tons
+   &lt;chr&gt;                                              &lt;chr&gt; &lt;chr&gt;          &lt;dbl&gt;
+ 1 MTA New York City Transit                          Heav… NY           450206.
+ 2 MTA New York City Transit                          Bus   NY           335601.
+ 3 Northeast Illinois Regional Commuter Railroad Cor… Comm… IL           315274.
+ 4 New Jersey Transit Corporation                     Bus   NJ           267986.
+ 5 New Jersey Transit Corporation                     Comm… NJ           263943.
+ 6 MTA Long Island Rail Road                          Comm… NY           239151.
+ 7 Los Angeles County Metropolitan Transportation Au… Bus   CA           232831.
+ 8 Metro-North Commuter Railroad Company, dba: MTA M… Comm… NY           203859.
+ 9 Chicago Transit Authority                          Bus   IL           181892.
+10 Washington State Ferries                           Ferr… WA           173052.</code></pre>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>AGENCY_EMISSIONS <span class="ot">&lt;-</span> EMISSIONS <span class="sc">|&gt;</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(<span class="st">`</span><span class="at">NTD ID</span><span class="st">`</span>, Agency, state) <span class="sc">|&gt;</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="at">total_CO2_lbs   =</span> <span class="fu">sum</span>(total_CO2_lbs),</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">total_upt       =</span> <span class="fu">sum</span>(total_upt),</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">passenger_miles =</span> <span class="fu">sum</span>(passenger_miles),</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">CO2_per_UPT =</span> total_CO2_lbs <span class="sc">/</span> total_upt,</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>           <span class="at">CO2_per_PM  =</span> total_CO2_lbs <span class="sc">/</span> passenger_miles)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<ul>
+<li><strong>Totaling</strong>: Added together the emissions from all modes of transportation (buses, subways, ferries, etc.) for the same organization.</li>
+<li><strong>Standardization</strong>: Divided by the <strong>Annual Passenger Trips (UPT)</strong> and <strong>Passenger Miles</strong> to obtain “emissions per passenger trip” and “emissions per passenger mile.”</li>
+</ul>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>AGENCY_EMISSIONS <span class="ot">&lt;-</span> AGENCY_EMISSIONS <span class="sc">|&gt;</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(total_upt <span class="sc">&gt;=</span> <span class="dv">100000</span>,           </span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>           passenger_miles <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">|&gt;</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">size =</span> <span class="fu">case_when</span>(</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>        total_upt <span class="sc">&lt;</span>  <span class="fl">1e6</span>  <span class="sc">~</span> <span class="st">"Small"</span>,     </span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>        total_upt <span class="sc">&lt;</span>  <span class="fl">2e7</span>  <span class="sc">~</span> <span class="st">"Medium"</span>,    </span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>        <span class="cn">TRUE</span>              <span class="sc">~</span> <span class="st">"Large"</span>      </span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="fu">factor</span>(size, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Small"</span>, <span class="st">"Medium"</span>, <span class="st">"Large"</span>)))</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>AGENCY_EMISSIONS <span class="sc">|&gt;</span> <span class="fu">count</span>(size)          </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 2
+  size       n
+  &lt;fct&gt;  &lt;int&gt;
+1 Small    188
+2 Medium   231
+3 Large     41</code></pre>
+</div>
+</div>
+<p>To avoid pitting elephants against ants, we eliminated extremely small organizations with fewer than 100,000 passengers annually and categorized the remaining organizations into three groups based on passenger volume: <strong>small</strong> (less than 1 million passengers), <strong>medium</strong> (1 million to 20 million passengers), and <strong>large</strong> (more than 20 million passengers).</p>
+</section>
+<section id="best-award-greenest-transportation-organization-of-the-year" class="level3">
+<h3 class="anchored" data-anchor-id="best-award-greenest-transportation-organization-of-the-year">Best Award: Greenest Transportation Organization of the Year</h3>
+<p><strong>Large Group Winner: Tri-County Metropolitan Transportation District of Oregon (TriMet)</strong></p>
+<p>TriMet emits only <strong>0.40 pounds of CO2</strong> per passenger and an even lower <strong>0.10 pounds</strong> per passenger-mile.</p>
+<p>Portland’s remarkably low carbon footprint is attributed to both its light rail network and Oregon’s hydroelectric power grid. Traveling by TriMet truly offers a “green light” experience.</p>
+<p><strong>Mid-sized Group Champion: Anaheim Transportation Network (California)</strong></p>
+<p>Emissions are only <strong>0.20 lbs</strong> per passenger trip and <strong>0.14 lbs</strong> per passenger mile. Even in California, where electricity prices are among the highest in the nation, Anaheim ensures every kilowatt-hour is used efficiently, proving that “expensive” doesn’t equate to “dirty.”</p>
+<p><strong>Small Group Champion: Chicago Water Taxi (Wendella, Illinois)</strong></p>
+<p>Emissions are <strong>0.94 lbs</strong> per passenger trip and <strong>0.50 lbs</strong> per passenger mile. Who says green travel is only for land? This water taxi company has “ridden the waves,” dominating the small group and making commuting on the Chicago River a truly “green” experience.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>greenest_upt <span class="ot">&lt;-</span> AGENCY_EMISSIONS <span class="sc">|&gt;</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(size) <span class="sc">|&gt;</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">slice_min</span>(CO2_per_UPT, <span class="at">n =</span> <span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>()</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>greenest_pm <span class="ot">&lt;-</span> AGENCY_EMISSIONS <span class="sc">|&gt;</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(size) <span class="sc">|&gt;</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">slice_min</span>(CO2_per_PM, <span class="at">n =</span> <span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>()</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>greenest_upt <span class="sc">|&gt;</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(size, Agency, state, CO2_per_UPT, CO2_per_PM) <span class="sc">|&gt;</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">fmt_number</span>(<span class="fu">c</span>(CO2_per_UPT, CO2_per_PM), <span class="at">decimals =</span> <span class="dv">2</span>) <span class="sc">|&gt;</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cols_label</span>(<span class="at">size =</span> <span class="st">"Size"</span>, <span class="at">Agency =</span> <span class="st">"Agency"</span>, <span class="at">state =</span> <span class="st">"State"</span>,</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>               <span class="at">CO2_per_UPT =</span> <span class="st">"lbs CO2 / UPT"</span>,</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>               <span class="at">CO2_per_PM  =</span> <span class="st">"lbs CO2 / Passenger Mile"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tab_header</span>(<span class="at">title =</span> <span class="st">"Greenest Transit Agencies (per UPT)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div id="lqlrkouzag" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#lqlrkouzag table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#lqlrkouzag thead, #lqlrkouzag tbody, #lqlrkouzag tfoot, #lqlrkouzag tr, #lqlrkouzag td, #lqlrkouzag th {
+  border-style: none;
+}
+
+#lqlrkouzag p {
+  margin: 0;
+  padding: 0;
+}
+
+#lqlrkouzag .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#lqlrkouzag .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#lqlrkouzag .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#lqlrkouzag .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#lqlrkouzag .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#lqlrkouzag .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#lqlrkouzag .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#lqlrkouzag .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#lqlrkouzag .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#lqlrkouzag .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#lqlrkouzag .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#lqlrkouzag .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#lqlrkouzag .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#lqlrkouzag .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#lqlrkouzag .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#lqlrkouzag .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#lqlrkouzag .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#lqlrkouzag .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#lqlrkouzag .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#lqlrkouzag .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#lqlrkouzag .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#lqlrkouzag .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#lqlrkouzag .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#lqlrkouzag .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#lqlrkouzag .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#lqlrkouzag .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#lqlrkouzag .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#lqlrkouzag .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#lqlrkouzag .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#lqlrkouzag .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#lqlrkouzag .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#lqlrkouzag .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#lqlrkouzag .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#lqlrkouzag .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#lqlrkouzag .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#lqlrkouzag .gt_left {
+  text-align: left;
+}
+
+#lqlrkouzag .gt_center {
+  text-align: center;
+}
+
+#lqlrkouzag .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#lqlrkouzag .gt_font_normal {
+  font-weight: normal;
+}
+
+#lqlrkouzag .gt_font_bold {
+  font-weight: bold;
+}
+
+#lqlrkouzag .gt_font_italic {
+  font-style: italic;
+}
+
+#lqlrkouzag .gt_super {
+  font-size: 65%;
+}
+
+#lqlrkouzag .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#lqlrkouzag .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#lqlrkouzag .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#lqlrkouzag .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#lqlrkouzag .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#lqlrkouzag .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#lqlrkouzag .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#lqlrkouzag .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#lqlrkouzag div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_heading header">
+<td colspan="5" class="gt_heading gt_title gt_font_normal gt_bottom_border">Greenest Transit Agencies (per UPT)</td>
+</tr>
+<tr class="gt_col_headings even">
+<th id="size" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">Size</th>
+<th id="Agency" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Agency</th>
+<th id="state" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">State</th>
+<th id="CO2_per_UPT" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">lbs CO2 / UPT</th>
+<th id="CO2_per_PM" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">lbs CO2 / Passenger Mile</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_center" headers="size">Small</td>
+<td class="gt_row gt_left" headers="Agency">Chicago Water Taxi (Wendella)</td>
+<td class="gt_row gt_left" headers="state">IL</td>
+<td class="gt_row gt_right" headers="CO2_per_UPT">0.94</td>
+<td class="gt_row gt_right" headers="CO2_per_PM">0.50</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center" headers="size">Medium</td>
+<td class="gt_row gt_left" headers="Agency">Anaheim Transportation Network, dba: Anaheim Regional Transportation</td>
+<td class="gt_row gt_left" headers="state">CA</td>
+<td class="gt_row gt_right" headers="CO2_per_UPT">0.20</td>
+<td class="gt_row gt_right" headers="CO2_per_PM">0.14</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="size">Large</td>
+<td class="gt_row gt_left" headers="Agency">Tri-County Metropolitan Transportation District of Oregon, dba: TriMet</td>
+<td class="gt_row gt_left" headers="state">OR</td>
+<td class="gt_row gt_right" headers="CO2_per_UPT">0.40</td>
+<td class="gt_row gt_right" headers="CO2_per_PM">0.10</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>greenest_pm <span class="sc">|&gt;</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(size, Agency, state, CO2_per_PM, CO2_per_UPT) <span class="sc">|&gt;</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">fmt_number</span>(<span class="fu">c</span>(CO2_per_PM, CO2_per_UPT), <span class="at">decimals =</span> <span class="dv">2</span>) <span class="sc">|&gt;</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cols_label</span>(<span class="at">size =</span> <span class="st">"Size"</span>, <span class="at">Agency =</span> <span class="st">"Agency"</span>, <span class="at">state =</span> <span class="st">"State"</span>,</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">CO2_per_PM  =</span> <span class="st">"lbs CO2 / Passenger Mile"</span>,</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">CO2_per_UPT =</span> <span class="st">"lbs CO2 / UPT"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tab_header</span>(<span class="at">title =</span> <span class="st">"Greenest Transit Agencies (per Passenger Mile)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div id="miyghskslg" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#miyghskslg table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#miyghskslg thead, #miyghskslg tbody, #miyghskslg tfoot, #miyghskslg tr, #miyghskslg td, #miyghskslg th {
+  border-style: none;
+}
+
+#miyghskslg p {
+  margin: 0;
+  padding: 0;
+}
+
+#miyghskslg .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#miyghskslg .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#miyghskslg .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#miyghskslg .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#miyghskslg .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#miyghskslg .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#miyghskslg .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#miyghskslg .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#miyghskslg .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#miyghskslg .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#miyghskslg .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#miyghskslg .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#miyghskslg .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#miyghskslg .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#miyghskslg .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#miyghskslg .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#miyghskslg .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#miyghskslg .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#miyghskslg .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#miyghskslg .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#miyghskslg .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#miyghskslg .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#miyghskslg .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#miyghskslg .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#miyghskslg .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#miyghskslg .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#miyghskslg .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#miyghskslg .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#miyghskslg .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#miyghskslg .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#miyghskslg .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#miyghskslg .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#miyghskslg .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#miyghskslg .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#miyghskslg .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#miyghskslg .gt_left {
+  text-align: left;
+}
+
+#miyghskslg .gt_center {
+  text-align: center;
+}
+
+#miyghskslg .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#miyghskslg .gt_font_normal {
+  font-weight: normal;
+}
+
+#miyghskslg .gt_font_bold {
+  font-weight: bold;
+}
+
+#miyghskslg .gt_font_italic {
+  font-style: italic;
+}
+
+#miyghskslg .gt_super {
+  font-size: 65%;
+}
+
+#miyghskslg .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#miyghskslg .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#miyghskslg .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#miyghskslg .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#miyghskslg .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#miyghskslg .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#miyghskslg .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#miyghskslg .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#miyghskslg div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_heading header">
+<td colspan="5" class="gt_heading gt_title gt_font_normal gt_bottom_border">Greenest Transit Agencies (per Passenger Mile)</td>
+</tr>
+<tr class="gt_col_headings even">
+<th id="size" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">Size</th>
+<th id="Agency" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Agency</th>
+<th id="state" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">State</th>
+<th id="CO2_per_PM" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">lbs CO2 / Passenger Mile</th>
+<th id="CO2_per_UPT" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">lbs CO2 / UPT</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_center" headers="size">Small</td>
+<td class="gt_row gt_left" headers="Agency">Adirondack Transit Lines, Inc., dba: Adirondack Trailways</td>
+<td class="gt_row gt_left" headers="state">NY</td>
+<td class="gt_row gt_right" headers="CO2_per_PM">0.15</td>
+<td class="gt_row gt_right" headers="CO2_per_UPT">12.75</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center" headers="size">Medium</td>
+<td class="gt_row gt_left" headers="Agency">Snohomish County Public Transportation Benefit Area Corporation, dba: Community Transit</td>
+<td class="gt_row gt_left" headers="state">WA</td>
+<td class="gt_row gt_right" headers="CO2_per_PM">0.12</td>
+<td class="gt_row gt_right" headers="CO2_per_UPT">0.69</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="size">Large</td>
+<td class="gt_row gt_left" headers="Agency">Tri-County Metropolitan Transportation District of Oregon, dba: TriMet</td>
+<td class="gt_row gt_left" headers="state">OR</td>
+<td class="gt_row gt_right" headers="CO2_per_PM">0.10</td>
+<td class="gt_row gt_right" headers="CO2_per_UPT">0.40</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="worst-of-the-year-award-the-worst-agency-award" class="level3">
+<h3 class="anchored" data-anchor-id="worst-of-the-year-award-the-worst-agency-award">Worst of the Year Award: The “Worst $Agency” Award</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>worst <span class="ot">&lt;-</span> AGENCY_EMISSIONS <span class="sc">|&gt;</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(size <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Medium"</span>, <span class="st">"Large"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">slice_max</span>(CO2_per_PM, <span class="at">n =</span> <span class="dv">1</span>)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>AGENCY_EMISSIONS <span class="sc">|&gt;</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(size <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Medium"</span>, <span class="st">"Large"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">slice_max</span>(CO2_per_PM, <span class="at">n =</span> <span class="dv">10</span>) <span class="sc">|&gt;</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">label    =</span> <span class="fu">str_trunc</span>(Agency, <span class="dv">40</span>),</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>           <span class="at">is_worst =</span> Agency <span class="sc">==</span> worst<span class="sc">$</span>Agency) <span class="sc">|&gt;</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(label, CO2_per_PM), <span class="at">y =</span> CO2_per_PM, <span class="at">fill =</span> is_worst)) <span class="sc">+</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="fl">0.89</span>, <span class="at">linetype =</span> <span class="st">"dotted"</span>, <span class="at">color =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> <span class="dv">1</span>, <span class="at">y =</span> <span class="fl">0.89</span>, <span class="at">label =</span> <span class="st">"Typical car"</span>,</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>             <span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.05</span>, <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">color =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"grey70"</span>, <span class="st">"firebrick"</span>), <span class="at">guide =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"The Least Green Medium &amp; Large Transit Agencies"</span>,</span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>         <span class="at">subtitle =</span> <span class="fu">paste0</span>(<span class="st">"Dishonorable mention: "</span>, <span class="fu">str_trunc</span>(worst<span class="sc">$</span>Agency, <span class="dv">50</span>)),</span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>         <span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="st">"lbs CO2 per passenger mile"</span>) <span class="sc">+</span></span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="mp02_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>While some rejoice, others are left feeling utterly embarrassed.</p>
+<p>This year’s Worst of the Year award goes to <strong>City of Glendale, dba: Beeline Bus/Dial-A-Ride</strong> (CA).</p>
+<p><strong>Method of Evaluation</strong>: Comparing CO2 emissions per passenger mile across medium and large agencies.</p>
+<p><strong>Its Performance</strong>: Emits <strong>3.32 pounds of CO2 per passenger mile</strong>, on the top of the place.</p>
+</section>
+<section id="conclusion" class="level3">
+<h3 class="anchored" data-anchor-id="conclusion">Conclusion</h3>
+<p>Public transportation is a great help for green travel, but being “green” isn’t automatically achieved by simply taking the bus: energy mix, the state’s power grid, and passenger volume all influence the final carbon bill. Congratulations to all the award winners, and we look forward to seeing more organizations join the ranks of carbon reduction next year.</p>
+<p>See you next time!</p>
+<div class="callout callout-style-default callout-note callout-titled" title="AI Usage Statement">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>AI Usage Statement
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>ChatGPT was used to help write the code in this project, but all non-code text was generated without the use of any Generative AI tools. Additionally, ChatGPT was used to provide additional background information on the topic and to brainstorm ideas for the final open-ended prompt.</p>
+</div>
+</div>
+</div>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
